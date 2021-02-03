@@ -1,17 +1,22 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Poems.Data.Models;
+using Poems.Shared.ViewModels;
+using Swashbuckle.AspNetCore.SwaggerGen;
+
+
 
 namespace Poems.API
 {
@@ -28,28 +33,111 @@ namespace Poems.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddOptions();
+            services.AddHttpContextAccessor();
             services.AddDbContext<DNS_Beta_2Context>(options =>
-    options.UseSqlServer(Configuration.GetConnectionString("PoemContext")));
+            options.UseSqlServer(Configuration.GetConnectionString("PoemContext")));
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAllOrigins",
+                    builder =>
+                    {
+                        builder
+                            .AllowAnyOrigin()
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+            });
+            services.AddSignalR();
+
+          //  services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.AddRouting(options => options.LowercaseUrls = true);
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+
+            services.AddApiVersioning(
+               config =>
+               {
+                   config.ReportApiVersions = true;
+                   config.AssumeDefaultVersionWhenUnspecified = true;
+                   config.DefaultApiVersion = new ApiVersion(1, 0);
+                   config.ApiVersionReader = new HeaderApiVersionReader("api-version");
+               });
+            services.AddVersionedApiExplorer(
+                options =>
+                {
+                    options.GroupNameFormat = "'v'VVV";
+
+                    // note: this option is only necessary when versioning by url segment. the SubstitutionFormat
+                    // can also be used to control the format of the API version in route templates
+                    options.SubstituteApiVersionInUrl = true;
+                });
+            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+            services.AddSwaggerGen();
+
+            // configure strongly typed settings objects
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettingsViewModel>(appSettingsSection);
+
+            var appSettings = appSettingsSection.Get<AppSettingsViewModel>();
+  
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseHsts();
+                app.UseExceptionHandler(errorApp =>
+                {
+                    errorApp.Run(async context =>
+                    {
+                        context.Response.StatusCode = 500;
+                        context.Response.ContentType = "text/plain";
+                        var errorFeature = context.Features.Get<IExceptionHandlerFeature>();
+                        if (errorFeature != null)
+                        {
+                            var logger = loggerFactory.CreateLogger("Global exception logger");
+                            logger.LogError(500, errorFeature.Error, errorFeature.Error.Message);
+                        }
+
+                        await context.Response.WriteAsync("There was an error");
+                    });
+                });
+            }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
+            app.UseCors("AllowAllOrigins");
+            app.UseAuthentication();
             app.UseAuthorization();
+
+            //Adding static file middleware
+            app.UseStaticFiles();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+
+            app.UseSwagger();
+            app.UseSwaggerUI(
+                options =>
+                {
+                    foreach (var description in provider.ApiVersionDescriptions)
+                    {
+                        options.SwaggerEndpoint(
+                            $"/swagger/{description.GroupName}/swagger.json",
+                            description.GroupName.ToUpperInvariant());
+                    }
+                });
         }
     }
 }

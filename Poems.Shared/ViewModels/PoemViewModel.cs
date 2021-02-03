@@ -1,21 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
-#nullable disable
-
-namespace Poems.Data.Models
+namespace Poems.Shared.ViewModels
 {
-    public partial class Poem
+    public class PoemViewModel
     {
-        public Poem()
-        {
-            PoemContributors = new HashSet<PoemContributor>();
-            PoemTasks = new HashSet<PoemTask>();
-        }
-
         public int PoemId { get; set; }
         public int? ItemNumber { get; set; }
         public string PoemTitle { get; set; }
+        public string Poet { get; set; }
         public int PoemLanguageId { get; set; }
         public string PoemCause { get; set; }
         public string PoemPurpose { get; set; }
@@ -31,11 +25,10 @@ namespace Poems.Data.Models
         public DateTime? ApprovalDate { get; set; }
         public bool IsActive { get; set; }
 
-        public virtual PoemEra PoemEra { get; set; }
-        public virtual PoemLanguage PoemLanguage { get; set; }
-        public virtual PoemStructure PoemStructure { get; set; }
-        public virtual PoemType PoemType { get; set; }
-        public virtual ICollection<PoemContributor> PoemContributors { get; set; }
-        public virtual ICollection<PoemTask> PoemTasks { get; set; }
+        public virtual string PoemEra { get; set; }
+        public virtual string PoemLanguage { get; set; }
+        public virtual string PoemStructure { get; set; }
+        public virtual string PoemType { get; set; }
+
     }
 }

@@ -4,4 +4,9 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Poems.Data\Poems.Data.csproj" />
+    <ProjectReference Include="..\Poems.Shared\Poems.Shared.csproj" />
+  </ItemGroup>
+
 </Project>
