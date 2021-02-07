@@ -8,7 +8,19 @@ namespace Poems.Shared
     public enum PoemEra
     {
         [Display(Name = "Active", ResourceType = typeof(PoemsResources))]
-        Active = 1
+        Active = 1,
+        //[Display(Name = "Active", ResourceType = typeof(PoemsResources))]
+        //Active = 1,
+        //[Display(Name = "Active", ResourceType = typeof(PoemsResources))]
+        //Active = 1,
+        //[Display(Name = "Active", ResourceType = typeof(PoemsResources))]
+        //Active = 1,
+        //[Display(Name = "Active", ResourceType = typeof(PoemsResources))]
+        //Active = 1,
+        //[Display(Name = "Active", ResourceType = typeof(PoemsResources))]
+        //Active = 1,
+        //[Display(Name = "Active", ResourceType = typeof(PoemsResources))]
+        //Active = 1,
     }
 
     public enum PoemLanguage

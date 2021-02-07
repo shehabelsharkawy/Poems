@@ -61,11 +61,47 @@ namespace Poems.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to هذا العصر غير موجود.
+        /// </summary>
+        public static string EraIsNotExist {
+            get {
+                return ResourceManager.GetString("EraIsNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to حدث خطأ !.
         /// </summary>
         public static string ExceptionMessage {
             get {
                 return ResourceManager.GetString("ExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to القصيدة غير موجودة.
+        /// </summary>
+        public static string PoemNotExist {
+            get {
+                return ResourceManager.GetString("PoemNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to لا يوجد قصائد في هذا العصر.
+        /// </summary>
+        public static string PoemsAreNotExist {
+            get {
+                return ResourceManager.GetString("PoemsAreNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to لا يوجد عصور.
+        /// </summary>
+        public static string ThereIsNowEras {
+            get {
+                return ResourceManager.GetString("ThereIsNowEras", resourceCulture);
             }
         }
     }

@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Poems.Data.Models;
+using Poems.Data.UnitOfWork;
 using Poems.Shared.ViewModels;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -50,7 +51,7 @@ namespace Poems.API
             });
             services.AddSignalR();
 
-          //  services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddRouting(options => options.LowercaseUrls = true);
 

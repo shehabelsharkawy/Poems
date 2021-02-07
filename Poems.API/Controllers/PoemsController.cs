@@ -29,21 +29,92 @@ namespace Poems.API.Controllers
             _exceptionManager = new ExceptionManager(unitOfWork);
         }
 
-        // GetAllPoems
+        // Serach Poems
         [HttpPost]
-        [Route("GetAllPoems")]
-        public async Task<ActionResult<Result>> GetAllPoems(string searchText)
+        [Route("SearchPoems")]
+        public async Task<ActionResult<Result>> SearchPoems(string searchText)
         {
             try
             {
-                var Result = await _PoemManager.SearchPoems(searchText);
+                var result = await _PoemManager.SearchPoems(searchText);
 
-                return Result;
+                return result;
 
             }
             catch (Exception ex)
             {
                 _exceptionManager.SaveLog(Request.Path, searchText, ex);
+                return new Result()
+                {
+                    IsSuccess = false,
+                    Errors = new List<string> { PoemsResources.ExceptionMessage }
+                };
+            }
+        }
+
+
+        // Serach Poems
+        [HttpPost]
+        [Route("GetPoemsByEraId")]
+        public async Task<ActionResult<Result>> GetPoemsByEraId(int EraId)
+        {
+            try
+            {
+                var result = await _PoemManager.GetPoemsByEraId(EraId);
+
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                _exceptionManager.SaveLog(Request.Path, EraId, ex);
+                return new Result()
+                {
+                    IsSuccess = false,
+                    Errors = new List<string> { PoemsResources.ExceptionMessage }
+                };
+            }
+        }
+
+        // Serach Poems
+        [HttpGet]
+        [Route("GetAllEras")]
+        public async Task<ActionResult<Result>> GetAllEras()
+        {
+            try
+            {
+                var result = await _PoemManager.GetAllEras();
+
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                _exceptionManager.SaveLog(Request.Path, null, ex);
+                return new Result()
+                {
+                    IsSuccess = false,
+                    Errors = new List<string> { PoemsResources.ExceptionMessage }
+                };
+            }
+        }
+
+
+        // Get Poem By ItemNumber
+        [HttpPost]
+        [Route("GetPoemByItemNumber")]
+        public async Task<ActionResult<Result>> GetPoemByItemNumber(int itemNumber)
+        {
+            try
+            {
+                var result = await _PoemManager.GetPoemByItemNumber(itemNumber);
+
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                _exceptionManager.SaveLog(Request.Path, itemNumber, ex);
                 return new Result()
                 {
                     IsSuccess = false,

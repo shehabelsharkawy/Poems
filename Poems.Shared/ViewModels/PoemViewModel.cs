@@ -17,14 +17,9 @@ namespace Poems.Shared.ViewModels
         public int PoemTypeId { get; set; }
         public int PoemStructureId { get; set; }
         public DateTime? PublishingDate { get; set; }
-        public DateTime? LastUpdateDate { get; set; }
         public string AboutPoetTitleA { get; set; }
         public bool? HasAudio { get; set; }
-        public bool? IsApproved { get; set; }
-        public bool? IsRelatedToBook { get; set; }
-        public DateTime? ApprovalDate { get; set; }
         public bool IsActive { get; set; }
-
         public virtual string PoemEra { get; set; }
         public virtual string PoemLanguage { get; set; }
         public virtual string PoemStructure { get; set; }

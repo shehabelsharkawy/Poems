@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using Poems.Data.UnitOfWork;
+using Poems.Shared;
 using Poems.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,82 @@ namespace Poems.Business
 
             };
         }
+
+        
+        public async Task<Result> GetPoemsByEraId(int EraId)
+        {
+            var data = await _unitOfWork.PoemRepository.GetPoemsByEraId(EraId);
+            if (data != null && data.Count > 0)
+            {
+                return new Result()
+                {
+                    Data = data,
+                    IsSuccess = true,
+                    Errors = new List<string>()
+
+                };
+            }
+            else
+            {
+                return new Result()
+                {
+                    IsSuccess = false,
+                    Errors = new List<string> { PoemsResources.PoemsAreNotExist }
+
+                };
+            }
+        }
+
+
+        public async Task<Result> GetAllEras()
+        {
+            var data = await _unitOfWork.PoemRepository.GetAllEras();
+            if (data != null || data.Count !=0)
+            {
+                return new Result()
+                {
+                    Data = data,
+                    IsSuccess = true,
+                    Errors = new List<string>()
+
+                };
+            }
+            else
+            {
+                return new Result()
+                {
+                    IsSuccess = false,
+                    Errors = new List<string> { PoemsResources.ThereIsNowEras }
+
+                };
+            }
+        }
+
+
+        public async Task<Result> GetPoemByItemNumber(int itemNumber)
+        {
+            var data = await _unitOfWork.PoemRepository.GetPoemByItemNumber(itemNumber);
+            if (data != null)
+            {
+                return new Result()
+                {
+                    Data = data,
+                    IsSuccess = true,
+                    Errors = new List<string>()
+
+                };
+            }
+            else
+            {
+                return new Result()
+                {
+                    IsSuccess = false,
+                    Errors = new List<string> { PoemsResources.PoemNotExist }
+
+                };
+            }
+        }
+
 
     }
 }

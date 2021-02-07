@@ -117,7 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="EraIsNotExist" xml:space="preserve">
+    <value>هذا العصر غير موجود</value>
+  </data>
   <data name="ExceptionMessage" xml:space="preserve">
     <value>حدث خطأ !</value>
+  </data>
+  <data name="PoemNotExist" xml:space="preserve">
+    <value>القصيدة غير موجودة</value>
+  </data>
+  <data name="PoemsAreNotExist" xml:space="preserve">
+    <value>لا يوجد قصائد في هذا العصر</value>
+  </data>
+  <data name="ThereIsNowEras" xml:space="preserve">
+    <value>لا يوجد عصور</value>
   </data>
 </root>
